@@ -1,0 +1,72 @@
+.centered-item {
+    display: flex;              /* enables centering items */
+    justify-content: center;    /* horizontally */
+    align-items: center;        /* vertically */
+}
+
+.centered-item.tool-bar {
+    height: 100%;
+    background-color: #44466d;
+}
+
+.centered-item.text-box {
+    color: #c2c2c2;
+    margin: 0 15px 0 0;
+    display: flex;
+    align-items: center;
+}
+
+.separator {
+    height: 100%;
+    width: 5px;
+
+    margin: 0 25px;
+    display: inline-block;
+
+    background-color: rgba(39, 7, 44, 0.8);
+}
+
+.button {
+    color: black;
+    background-color: #d6d6d6;
+   
+    border: none;
+    border-radius: 30px;
+
+    text-align: center;
+    transition: all 0.5s;
+    cursor: pointer;
+
+    width: 165px;
+    padding: 8px 15px;
+    font-size: 18px;
+}
+
+.button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+  
+.button:hover span {
+    padding-right: 25px;
+}
+  
+.button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.button:active {
+    background-color: #a7a7a7;
+}
