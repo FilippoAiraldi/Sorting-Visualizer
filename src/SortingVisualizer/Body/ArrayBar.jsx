@@ -2,18 +2,18 @@ import React from 'react'
 import './ArrayBar.css'
 
 export default class ArrayBar extends React.Component {
-    constructor(props) {
+    /* constructor(props) {
         super(props)
-    }
+    } */
 
     render() {
         return (
             <div
-                className="bar"
-                key={this.props.index}
+                className="array-bar"
                 style={{
-                    height: `${this.props.height}%`,
-                    width: `${this.props.width}%`
-                }} />);
+                    height: `${this.props.barHeight}%`,
+                    width: `${this.props.barWidth}%`
+                }}
+            />);
     }
 }

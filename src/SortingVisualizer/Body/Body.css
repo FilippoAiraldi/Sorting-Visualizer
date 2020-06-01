@@ -2,15 +2,3 @@
     display: flex;  /* allows to align bars to bottom */
     height: 100%;
 }
-
-.array-bar {
-    display: inline-block; 
-    align-self: flex-end;           /* aligns bars to bottom */
-    width: 20px;
-
-    box-sizing: border-box;
-    border: solid 1px #040527;    /* matches app background */;
-    background-color: #2c32e0;
-
-    transition: height 0.3s ease;
-}

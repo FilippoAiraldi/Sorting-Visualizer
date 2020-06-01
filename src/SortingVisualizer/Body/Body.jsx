@@ -1,5 +1,5 @@
 import React from 'react'
-// import ArrayBar from './ArrayBar'
+import ArrayBar from './ArrayBar'
 import { invokeSortingAlgorithm } from '../Algorithms/Algorithms.js';
 import './Body.css'
 
@@ -42,7 +42,7 @@ export default class Body extends React.Component {
         // get all array bars
         // let bars = document.getElementsByName("whsss");
         const bars = document.getElementsByTagName("ArrayBar");
-        console.log(bars)
+        console.log(bars.length);
 
         /* // get animations for the selected algorithm
         let animations = invokeSortingAlgorithm(method, this.state.array.slice());
@@ -57,18 +57,10 @@ export default class Body extends React.Component {
             <div className="array-container">
                 {
                     this.state.array.map((h, i) => (
-                        /* <ArrayBar
-                            className="array-bar"
-                            index={i}
-                            height={h}
-                            width={w} /> */
-                        <div
-                            className="array-bar"
+                        <ArrayBar
                             key={i}
-                            style={{
-                                height: `${this.props.height}%`,
-                                width: `${this.props.width}%`
-                            }}
+                            barHeight={h}
+                            barWidth={w}
                         />
                     ))
                 }
@@ -76,8 +68,6 @@ export default class Body extends React.Component {
         );
     }
 }
-
-
 
 Math.randomFromInterval = function (min, max) {
     // min and max inclusive
