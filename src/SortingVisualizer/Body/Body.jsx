@@ -1,10 +1,22 @@
 import React from 'react'
+// import ArrayBar from './ArrayBar'
+import { invokeSortingAlgorithm } from '../Algorithms/Algorithms.js';
 import './Body.css'
+
+/* const STANDARD_COLOR = "#2c32e0";   // standard color for a bar
+const COMPARED_COLOR = "turquoise"; // color of bars under comparison
+const SWAPPED_COLOR = "darkred";    // color of swapped bars
+const SORTED_COLOR = "purple";      // color of sorted bars
+const PIVOT_COLOR = "green";        // color of bars acting as pivots
+let ANIMATION_SPEED = 10;           // in ms */
 
 export default class Body extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { array: [], numberOfBars: 100 };
+        this.state = {
+            array: [],
+            numberOfBars: 100
+        };
     }
 
     componentDidMount() {
@@ -20,22 +32,23 @@ export default class Body extends React.Component {
     }
 
     generateBars(n) {
-        var arr = [];
+        let arr = [];
         for (let i = 0; i < n; ++i)
             arr.push(Math.roundToDigit(Math.randomFromInterval(1, 100), 2));
         return arr;
     }
 
     sortArray(method) {
-        const copy = this.state.array.slice();
+        // get all array bars
+        // let bars = document.getElementsByName("whsss");
+        const bars = document.getElementsByTagName("ArrayBar");
+        console.log(bars)
 
-        // js built-in function
-        const sorted = copy.sort((a, b) => a > b);
+        /* // get animations for the selected algorithm
+        let animations = invokeSortingAlgorithm(method, this.state.array.slice());
 
-        /* this.setState({
-            array: sorted,
-            numberOfBars: this.state.numberOfBars
-        }); */
+        // calculate animation speed
+        ANIMATION_SPEED = 5000; */
     }
 
     render() {
@@ -44,10 +57,20 @@ export default class Body extends React.Component {
             <div className="array-container">
                 {
                     this.state.array.map((h, i) => (
-                        <div
-                            key={i}
+                        /* <ArrayBar
                             className="array-bar"
-                            style={{ height: `${h}%`, width: `${w}%` }} />))
+                            index={i}
+                            height={h}
+                            width={w} /> */
+                        <div
+                            className="array-bar"
+                            key={i}
+                            style={{
+                                height: `${this.props.height}%`,
+                                width: `${this.props.width}%`
+                            }}
+                        />
+                    ))
                 }
             </div>
         );
