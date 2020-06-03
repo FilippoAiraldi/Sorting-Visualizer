@@ -45,6 +45,8 @@ export default class ToolBar extends React.Component {
                     className="centered-item">
                     <option value="bubble_sort">Bubble sort</option>
                     <option value="cocktail_sort">Cocktail sort</option>
+                    <option value="selection_sort">Selection sort</option>
+                    <option value="oddeven_sort">Odd-even sort</option>
                 </select>
 
                 <div className="separator" />
