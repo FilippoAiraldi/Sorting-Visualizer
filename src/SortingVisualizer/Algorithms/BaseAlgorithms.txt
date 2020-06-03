@@ -1,0 +1,14 @@
+# BUBBLE SORT
+let N = v.length;
+let unsorted;
+do {
+    unsorted = false;
+    for (let i = 1; i < N; ++i) {
+        if (v[i - 1] > v[i]) {
+            swap(v, i - 1, i);
+            unsorted = true;
+        }
+    }
+    N--;
+}
+while (unsorted);

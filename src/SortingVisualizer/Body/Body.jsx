@@ -1,7 +1,7 @@
 import React from 'react'
 import ArrayBar from './ArrayBar'
 import { CONSTS } from '../Constants.js';
-import { invokeSortingAlgorithm } from '../Algorithms/Algorithms.js';
+import { invokeSortingAlgorithm, forceStop } from '../Algorithms/Algorithms.js';
 import './Body.css'
 
 export default class Body extends React.Component {
@@ -35,6 +35,10 @@ export default class Body extends React.Component {
         return arr;
     }
 
+    stopSorting() {
+        forceStop();
+    }
+
     async sortArray(method) {
         // disable sorting controls
         let controls = document.getElementsByName("sort-control");
@@ -53,6 +57,9 @@ export default class Body extends React.Component {
 
         // enable sorting controls
         controls.forEach(c => c.disabled = false);
+
+        // fire that sorting is over
+        this.props.sortingCompleted();
     }
 
     render() {

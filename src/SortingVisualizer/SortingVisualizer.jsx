@@ -6,21 +6,27 @@ import ToolBar from './ToolBar/ToolBar'
 export default class SortingVisualizer extends React.Component {
     constructor(props) {
         super(props);
-        this.BodyRef = React.createRef();
+        this.state = {
+            bodyRef: React.createRef(),
+            toolBarRef: React.createRef()
+        };
     }
 
     render() {
         var ratio = 90; // [0 - 100]
-
         return (
             <div className="main-window">
                 <div style={{ height: `${ratio}vh` }}>
-                    <Body ref={this.BodyRef} />
+                    <Body
+                        ref={this.state.bodyRef}
+                        sortingCompleted={() => this.state.toolBarRef.current.sortingCompleted()} />
                 </div>
                 <div style={{ height: `${100 - ratio}vh` }}>
                     <ToolBar
-                        handleRangeChanged={(n) => this.BodyRef.current.setNumberOfBars(n)}
-                        startSortActivated={(method) => this.BodyRef.current.sortArray(method)} />
+                        ref={this.state.toolBarRef}
+                        handleRangeChanged={(n) => this.state.bodyRef.current.setNumberOfBars(n)}
+                        startSortActivated={(m) => this.state.bodyRef.current.sortArray(m)}
+                        stopSortActivated={() => this.state.bodyRef.current.stopSorting()} />
                 </div>
             </div>
         );

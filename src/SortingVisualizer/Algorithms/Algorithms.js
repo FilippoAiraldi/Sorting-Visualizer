@@ -1,10 +1,15 @@
 
-import { CONSTS, getAnimationSpeedMultiplier, getBaseAnimationSpeed } from '../Constants.js'
+import { CONSTS, getBaseAnimationSpeed, updateAnimationSpeed } from '../Constants.js'
 
 export async function invokeSortingAlgorithm(method, v) {
+    testAlgorithm(v); return;
+
     switch (method) {
         case "bubble_sort":
             await bubbleSort(v);
+            break;
+        case "cocktail_sort":
+            await cocktailSort(v);
             break;
         default:
             break;
@@ -12,10 +17,6 @@ export async function invokeSortingAlgorithm(method, v) {
 }
 
 async function bubbleSort(v) {
-    // get animation speed
-    let speed = getBaseAnimationSpeed(v.length);
-    let updatedSpeed = updateAnimationSpeed(speed);
-
     // initialize
     let N = v.length;
     let unsorted;
@@ -24,54 +25,64 @@ async function bubbleSort(v) {
     do {
         unsorted = false;
         for (let i = 1; i < N; ++i) {
-            // update animation speed from UI
-            updatedSpeed = updateAnimationSpeed(speed);
+            // check if a stop was requested
+            if (checkStopRequest()) return;
 
             // color bars under comparison
-            await color(v, [i - 1, i], CONSTS.COMPARED_COLOR, updatedSpeed, false);
+            await color(v, [i - 1, i], CONSTS.COMPARED_COLOR, false);
 
             if (v[i - 1].getHeight() > v[i].getHeight()) {
                 // color swapped bars
-                await color(v, [i - 1, i], CONSTS.SWAPPED_COLOR, updatedSpeed, false);
+                await color(v, [i - 1, i], CONSTS.SWAPPED_COLOR, false);
                 swap(v, i - 1, i);
                 unsorted = true;
             }
         }
         N--;
         // color sorted bar (always last one pointed by N)
-        await color(v, [N], CONSTS.SORTED_COLOR, updatedSpeed, true);
+        await color(v, [N], CONSTS.SORTED_COLOR, true);
     }
     while (unsorted);
 
     // color all bars as sorted
     v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
-
-    /*  ORIGINAL BUBBLE SORT
-    let N = v.length;
-    let unsorted;
-    do {
-        unsorted = false;
-        for (let i = 1; i < N; ++i) {
-            if (v[i - 1] > v[i]) {
-                swap(v, i - 1, i);
-                unsorted = true;
-            }
-        }
-        N--;
-    }
-    while (unsorted); */
 }
 
-function updateAnimationSpeed(baseInterval) {
-    let multiplier = 1;
-    let speedControl = document.getElementsByName("speed-control")[0];
-    if (speedControl !== undefined) {
-        multiplier = getAnimationSpeedMultiplier(speedControl.valueAsNumber);
-        if (multiplier <= 0) {
-            multiplier = 1;
+async function cocktailSort(v) {
+    let N = v.length;
+    let beginIdx = 0;
+    let endIdx = N - 2;
+    while (beginIdx <= endIdx) {
+        let newBeginIdx = endIdx;
+        let newEndIdx = beginIdx;
+        for (let i = beginIdx; i <= endIdx; ++i) {
+            if (v[i] > v[i + 1]) {
+                swap(v, i, i + 1);
+                newEndIdx = i;
+            }
         }
+        endIdx = newEndIdx - 1;
+        for (let i = endIdx; i <= beginIdx; --i) {
+            if (v[i] > v[i + 1]) {
+                swap(v, i, i + 1);
+                newBeginIdx = i;
+            }
+        }
+        beginIdx = newBeginIdx - 1;
     }
-    return baseInterval / multiplier;
+}
+
+let _forceStop = false;
+export function forceStop() {
+    _forceStop = true;
+}
+
+function checkStopRequest() {
+    if (_forceStop) {
+        _forceStop = false;
+        return true;
+    }
+    return false;
 }
 
 function sleep(ms) {
@@ -79,12 +90,19 @@ function sleep(ms) {
 }
 
 function swap(v, a, b) {
-    let tmp = v[a].getHeight();
+    /* let tmp = v[a].getHeight();
     v[a].setHeight(v[b].getHeight());
-    v[b].setHeight(tmp);
+    v[b].setHeight(tmp); */
+
+    let tmp = v[a];
+    v[a] = v[b];
+    v[b] = tmp;
 }
 
-async function color(v, indeces, color, interval, permanent = false) {
+async function color(v, indeces, color, permanent = false) {
+    // get the speed and its multiplier
+    let interval = updateAnimationSpeed(getBaseAnimationSpeed(v.length));
+
     // if permant, just apply the new color, wait and return
     if (permanent) {
         indeces.forEach(i => {
@@ -105,12 +123,15 @@ async function color(v, indeces, color, interval, permanent = false) {
     }
 }
 
-/* function testAlgorithm(method, array) {
+function testAlgorithm(v) {
+    console.log("Testing sorting algorithm:");
+
+    let array = v.map(b => b.getHeight())
     var test1 = array.slice();
     var test2 = array.slice();
 
     // sort with custom function
-    // bubbleSort(test1);
+    cocktailSort(test1);
 
     // sort with built-in function
     test2.sort((a, b) => a > b);
@@ -121,11 +142,10 @@ async function color(v, indeces, color, interval, permanent = false) {
 
     // compare arrays
     for (let i = 0; i < test1.length; ++i) {
-        if (test1[i] !== test2[i])
-            return false;
+        if (test1[i] !== test2[i]) {
+            console.log("test failed");
+            return;
+        }
     }
-    return true;
-} */
-
-
-
+    console.log("test succeeded");
+}
