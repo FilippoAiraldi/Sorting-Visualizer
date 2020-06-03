@@ -11,13 +11,13 @@ export default class SortingVisualizer extends React.Component {
 
     render() {
         var ratio = 90; // [0 - 100]
+
         return (
             <div className="main-window">
                 <div style={{ height: `${ratio}vh` }}>
                     <Body ref={this.BodyRef} />
                 </div>
-                <div
-                    style={{ height: `${100 - ratio}vh` }}>
+                <div style={{ height: `${100 - ratio}vh` }}>
                     <ToolBar
                         handleRangeChanged={(n) => this.BodyRef.current.setNumberOfBars(n)}
                         startSortActivated={(method) => this.BodyRef.current.sortArray(method)} />

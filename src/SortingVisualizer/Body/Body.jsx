@@ -1,22 +1,19 @@
 import React from 'react'
 import ArrayBar from './ArrayBar'
+import { CONSTS } from '../Constants.js';
 import { invokeSortingAlgorithm } from '../Algorithms/Algorithms.js';
 import './Body.css'
-
-/* const STANDARD_COLOR = "#2c32e0";   // standard color for a bar
-const COMPARED_COLOR = "turquoise"; // color of bars under comparison
-const SWAPPED_COLOR = "darkred";    // color of swapped bars
-const SORTED_COLOR = "purple";      // color of sorted bars
-const PIVOT_COLOR = "green";        // color of bars acting as pivots
-let ANIMATION_SPEED = 10;           // in ms */
 
 export default class Body extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             array: [],
-            numberOfBars: 100
+            numberOfBars: CONSTS.INIT_BARS
         };
+
+        // an array of refs to each bar
+        this.barsRefs = new Array(CONSTS.MAX_BARS);
     }
 
     componentDidMount() {
@@ -38,29 +35,43 @@ export default class Body extends React.Component {
         return arr;
     }
 
-    sortArray(method) {
-        // get all array bars
-        // let bars = document.getElementsByName("whsss");
-        const bars = document.getElementsByTagName("ArrayBar");
-        console.log(bars.length);
+    async sortArray(method) {
+        // disable sorting controls
+        let controls = document.getElementsByName("sort-control");
+        controls.forEach(c => c.disabled = true);
 
-        /* // get animations for the selected algorithm
-        let animations = invokeSortingAlgorithm(method, this.state.array.slice());
+        // call the sorting algorithm (after filtering out null refs) 
+        // corresponding to the method and wait for it to finish
+        let v = this.barsRefs.filter(ref => ref !== null);
+        if (v.length > 1) {
+            // color all bars as unsorted
+            v.forEach(b => b.setColor(CONSTS.STANDARD_COLOR));
 
-        // calculate animation speed
-        ANIMATION_SPEED = 5000; */
+            // proceed with sorting
+            await invokeSortingAlgorithm(method, v);
+        }
+
+        // enable sorting controls
+        controls.forEach(c => c.disabled = false);
     }
 
     render() {
+        // reset colors for all bars (that aren't null)
+        this.barsRefs.filter(r => r !== null).forEach(b => b.setColor(CONSTS.STANDARD_COLOR));
+
+        // compute width of each bar
         const w = 100 / this.state.numberOfBars;
+
+        // render bars
         return (
             <div className="array-container">
                 {
                     this.state.array.map((h, i) => (
                         <ArrayBar
                             key={i}
-                            barHeight={h}
-                            barWidth={w}
+                            height={h}
+                            width={w}
+                            ref={(instance) => { this.barsRefs[i] = instance }}
                         />
                     ))
                 }

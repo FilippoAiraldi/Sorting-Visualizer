@@ -26,7 +26,7 @@
     background-color: rgba(39, 7, 44, 0.8);
 }
 
-.button {
+.sort-button {
     color: black;
     background-color: #d6d6d6;
    
@@ -42,14 +42,18 @@
     font-size: 18px;
 }
 
-.button span {
+.sort-button:disabled {
+    color: #a3a3a3;
+}
+
+.sort-button span {
     cursor: pointer;
     display: inline-block;
     position: relative;
     transition: 0.5s;
 }
 
-.button span:after {
+.sort-button span:after {
     content: '\00bb';
     position: absolute;
     opacity: 0;
@@ -58,15 +62,15 @@
     transition: 0.5s;
 }
   
-.button:hover span {
+.sort-button:hover span {
     padding-right: 25px;
 }
   
-.button:hover span:after {
+.sort-button:hover span:after {
     opacity: 1;
     right: 0;
 }
 
-.button:active {
+.sort-button:active {
     background-color: #a7a7a7;
 }
