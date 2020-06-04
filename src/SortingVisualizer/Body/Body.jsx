@@ -31,8 +31,9 @@ export default class Body extends React.Component {
     generateBars(n) {
         let arr = [];
         for (let i = 0; i < n; ++i)
-            arr.push(Math.roundToDigit(Math.randomFromInterval(1, 100), 2));
+            arr.push(Math.randomFromInterval(1, 100));
         return arr;
+        // arr.push(Math.roundToDigit(Math.randomFromInterval(1, 100), 2));
     }
 
     stopSorting() {

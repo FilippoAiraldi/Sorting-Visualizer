@@ -43,11 +43,84 @@ export default class ToolBar extends React.Component {
                     name="sort-control"
                     ref={this.state.selectRef}
                     className="centered-item">
-                    <option value="bubble_sort">Bubble sort</option>
-                    <option value="cocktail_sort">Cocktail sort</option>
-                    <option value="selection_sort">Selection sort</option>
-                    <option value="oddeven_sort">Odd-even sort</option>
+
+                    <optgroup label="Exchanging">
+                        <option value="bubble_sort">Bubble sort</option>
+                        <option value="cocktail_sort">Cocktail sort</option>
+                        <option value="oddeven_sort">Odd-even sort</option>
+                        <option value="gnome_sort">Gnome sort</option>
+                        <option value="comb_sort">Comb sort</option>
+                    </optgroup>
+                    <option style={{ fontSize: "1pt" }} disabled={true}>&nbsp;</option>
+
+                    <optgroup label="Insertion">
+                        <option value="insertion_sort">Insertion sort</option>
+                        <option value="cycle_sort">Cycle sort</option>
+                        <option value="sheel_sort">Shellsort</option>
+                        <option value="tree_sort">Tree sort</option>
+                    </optgroup>
+                    <option style={{ fontSize: "1pt" }} disabled={true}>&nbsp;</option>
+
+                    <optgroup label="Selection">
+                        <option value="selection_sort">Selection sort</option>
+                    </optgroup>
+                    <option style={{ fontSize: "1pt" }} disabled={true}>&nbsp;</option>
+
+                    <optgroup label="Other">
+                        <option value="bogo_sort">Bogosort</option>
+                        <option value="slow_sort">Slowsort</option>
+                    </optgroup>
                 </select>
+
+                <button
+                    className="info-button"
+                    onClick={() => {
+                        let url;
+                        let e = this.state.selectRef.current;
+                        switch (e.options[e.selectedIndex].value) {
+                            case "bubble_sort":
+                                url = "https://en.wikipedia.org/wiki/Bubble_sort";
+                                break;
+                            case "cocktail_sort":
+                                url = "https://en.wikipedia.org/wiki/Cocktail_shaker_sort";
+                                break;
+                            case "oddeven_sort":
+                                url = "https://en.wikipedia.org/wiki/Odd%E2%80%93even_sort";
+                                break;
+                            case "comb_sort":
+                                url = "https://en.wikipedia.org/wiki/Comb_sort";
+                                break;
+                            case "selection_sort":
+                                url = "https://en.wikipedia.org/wiki/Selection_sort";
+                                break;
+                            case "insertion_sort":
+                                url = "https://en.wikipedia.org/wiki/Insertion_sort";
+                                break;
+                            case "gnome_sort":
+                                url = "https://en.wikipedia.org/wiki/Gnome_sort";
+                                break;
+                            case "cycle_sort":
+                                url = "https://en.wikipedia.org/wiki/Cycle_sort";
+                                break;
+                            case "sheel_sort":
+                                url = "https://en.wikipedia.org/wiki/Shellsort";
+                                break;
+                            case "tree_sort":
+                                url = "https://en.wikipedia.org/wiki/Tree_sort";
+                                break;
+                            case "bogo_sort":
+                                url = "https://en.wikipedia.org/wiki/Bogosort";
+                                break;
+                            case "slow_sort":
+                                url = "https://en.wikipedia.org/wiki/Slowsort";
+                                break;
+                            default:
+                                break;
+                        }
+                        if (url) window.open(url);
+                    }}>
+                    ?
+                </button>
 
                 <div className="separator" />
 
@@ -70,7 +143,7 @@ export default class ToolBar extends React.Component {
                     className={idle ? "sort-button" : "sort-button stop-button"}
                     onClick={() => {
                         if (idle) {
-                            var e = this.state.selectRef.current;
+                            let e = this.state.selectRef.current;
                             this.props.startSortActivated(e.options[e.selectedIndex].value);
                         }
                         else {

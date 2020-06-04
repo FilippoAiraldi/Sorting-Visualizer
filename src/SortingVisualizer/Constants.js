@@ -2,11 +2,16 @@
 let min_bars = 3;                       // minimum number of bars in the body
 let max_bars = 250;                     // maximum number of bars in the body
 
-let standard_color = "#2c32e0";         // standard color for a bar
-let compared_color = "lightblue";       // color of bars under comparison
-let swapped_color = "darkred";              // color of swapped bars
-let sorted_color = "darkorange";            // color of sorted bars
-let pivot_color = "green";            // color of bars acting as pivots
+let standard_color = "#2C32E0";         // standard color for a bar
+let compared_color = "#FFC30F";         // color of bars under comparison
+let swapped_color = "#C70039";          // color of swapped bars
+let pivot_color = "#FF5733";            // color of bars acting as pivots
+let sorted_color = "#581845";           // color of sorted/processed bars 
+/* let compared_color = "lightblue";    // color of bars under comparison
+let swapped_color = "darkred";          // color of swapped bars
+let sorted_color = "darkorange";        // color of sorted bars
+let pivot_color = "green";              // color of bars acting as pivots */
+
 
 let min_animation_speed = 0.1;          // min speed multiplier for animations
 let max_animation_speed = 10.0;         // max speed multiplier for animations
