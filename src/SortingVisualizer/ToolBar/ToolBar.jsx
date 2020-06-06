@@ -63,12 +63,22 @@ export default class ToolBar extends React.Component {
 
                     <optgroup label="Selection">
                         <option value="selection_sort">Selection sort</option>
+                        <option value="heap_sort">Heap sort</option>
+                        <option value="strand_sort">Strand sort</option>
+                    </optgroup>
+                    <option style={{ fontSize: "1pt" }} disabled={true}>&nbsp;</option>
+
+                    <optgroup label="Non-comparison">
+                        <option value="pigeonhole_sort">Pigeonhole sort</option>
                     </optgroup>
                     <option style={{ fontSize: "1pt" }} disabled={true}>&nbsp;</option>
 
                     <optgroup label="Other">
                         <option value="bogo_sort">Bogosort</option>
                         <option value="slow_sort">Slowsort</option>
+                        <option value="stooge_sort">Stooge sort</option>
+                        <option value="bead_sort">Bead sort</option>
+                        <option value="pancake_sort">Pancake sort</option>
                     </optgroup>
                 </select>
 
@@ -113,6 +123,24 @@ export default class ToolBar extends React.Component {
                                 break;
                             case "slow_sort":
                                 url = "https://en.wikipedia.org/wiki/Slowsort";
+                                break;
+                            case "heap_sort":
+                                url = "https://en.wikipedia.org/wiki/Heapsort";
+                                break;
+                            case "strand_sort":
+                                url = "https://en.wikipedia.org/wiki/Strand_sort";
+                                break;
+                            case "stooge_sort":
+                                url = "https://en.wikipedia.org/wiki/Stooge_sort";
+                                break;
+                            case "bead_sort":
+                                url = "https://en.wikipedia.org/wiki/Bead_sort";
+                                break;
+                            case "pancake_sort":
+                                url = "https://en.wikipedia.org/wiki/Pancake_sorting";
+                                break;
+                            case "pigeonhole_sort":
+                                url = "https://en.wikipedia.org/wiki/Pigeonhole_sort";
                                 break;
                             default:
                                 break;
