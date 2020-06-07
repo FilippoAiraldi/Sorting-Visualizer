@@ -1,3 +1,8 @@
+# Sorting Visualizer
+This is my take on a sorting visualizing project. Feel free to add other sorting algorithms to the source code or modify it.
+The project was heavily inspired by https://github.com/clementmihailescu/Sorting-Visualizer.
+
+# React README.md
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

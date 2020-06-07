@@ -68,8 +68,19 @@ export default class ToolBar extends React.Component {
                     </optgroup>
                     <option style={{ fontSize: "1pt" }} disabled={true}>&nbsp;</option>
 
+                    <optgroup label="Partitioning">
+                        <option value="quick_sort">Quicksort</option>
+                    </optgroup>
+                    <option style={{ fontSize: "1pt" }} disabled={true}>&nbsp;</option>
+
+                    <optgroup label="Merging">
+                        <option value="merge_sort">Merge sort</option>
+                    </optgroup>
+                    <option style={{ fontSize: "1pt" }} disabled={true}>&nbsp;</option>
+
                     <optgroup label="Non-comparison">
                         <option value="pigeonhole_sort">Pigeonhole sort</option>
+                        <option value="radix_sort">Radix sort (LSD)</option>
                     </optgroup>
                     <option style={{ fontSize: "1pt" }} disabled={true}>&nbsp;</option>
 
@@ -88,62 +99,28 @@ export default class ToolBar extends React.Component {
                         let url;
                         let e = this.state.selectRef.current;
                         switch (e.options[e.selectedIndex].value) {
-                            case "bubble_sort":
-                                url = "https://en.wikipedia.org/wiki/Bubble_sort";
-                                break;
-                            case "cocktail_sort":
-                                url = "https://en.wikipedia.org/wiki/Cocktail_shaker_sort";
-                                break;
-                            case "oddeven_sort":
-                                url = "https://en.wikipedia.org/wiki/Odd%E2%80%93even_sort";
-                                break;
-                            case "comb_sort":
-                                url = "https://en.wikipedia.org/wiki/Comb_sort";
-                                break;
-                            case "selection_sort":
-                                url = "https://en.wikipedia.org/wiki/Selection_sort";
-                                break;
-                            case "insertion_sort":
-                                url = "https://en.wikipedia.org/wiki/Insertion_sort";
-                                break;
-                            case "gnome_sort":
-                                url = "https://en.wikipedia.org/wiki/Gnome_sort";
-                                break;
-                            case "cycle_sort":
-                                url = "https://en.wikipedia.org/wiki/Cycle_sort";
-                                break;
-                            case "sheel_sort":
-                                url = "https://en.wikipedia.org/wiki/Shellsort";
-                                break;
-                            case "tree_sort":
-                                url = "https://en.wikipedia.org/wiki/Tree_sort";
-                                break;
-                            case "bogo_sort":
-                                url = "https://en.wikipedia.org/wiki/Bogosort";
-                                break;
-                            case "slow_sort":
-                                url = "https://en.wikipedia.org/wiki/Slowsort";
-                                break;
-                            case "heap_sort":
-                                url = "https://en.wikipedia.org/wiki/Heapsort";
-                                break;
-                            case "strand_sort":
-                                url = "https://en.wikipedia.org/wiki/Strand_sort";
-                                break;
-                            case "stooge_sort":
-                                url = "https://en.wikipedia.org/wiki/Stooge_sort";
-                                break;
-                            case "bead_sort":
-                                url = "https://en.wikipedia.org/wiki/Bead_sort";
-                                break;
-                            case "pancake_sort":
-                                url = "https://en.wikipedia.org/wiki/Pancake_sorting";
-                                break;
-                            case "pigeonhole_sort":
-                                url = "https://en.wikipedia.org/wiki/Pigeonhole_sort";
-                                break;
-                            default:
-                                break;
+                            case "bubble_sort": url = "https://en.wikipedia.org/wiki/Bubble_sort"; break;
+                            case "cocktail_sort": url = "https://en.wikipedia.org/wiki/Cocktail_shaker_sort"; break;
+                            case "oddeven_sort": url = "https://en.wikipedia.org/wiki/Odd%E2%80%93even_sort"; break;
+                            case "comb_sort": url = "https://en.wikipedia.org/wiki/Comb_sort"; break;
+                            case "selection_sort": url = "https://en.wikipedia.org/wiki/Selection_sort"; break;
+                            case "insertion_sort": url = "https://en.wikipedia.org/wiki/Insertion_sort"; break;
+                            case "gnome_sort": url = "https://en.wikipedia.org/wiki/Gnome_sort"; break;
+                            case "cycle_sort": url = "https://en.wikipedia.org/wiki/Cycle_sort"; break;
+                            case "sheel_sort": url = "https://en.wikipedia.org/wiki/Shellsort"; break;
+                            case "tree_sort": url = "https://en.wikipedia.org/wiki/Tree_sort"; break;
+                            case "bogo_sort": url = "https://en.wikipedia.org/wiki/Bogosort"; break;
+                            case "slow_sort": url = "https://en.wikipedia.org/wiki/Slowsort"; break;
+                            case "heap_sort": url = "https://en.wikipedia.org/wiki/Heapsort"; break;
+                            case "strand_sort": url = "https://en.wikipedia.org/wiki/Strand_sort"; break;
+                            case "stooge_sort": url = "https://en.wikipedia.org/wiki/Stooge_sort"; break;
+                            case "bead_sort": url = "https://en.wikipedia.org/wiki/Bead_sort"; break;
+                            case "pancake_sort": url = "https://en.wikipedia.org/wiki/Pancake_sorting"; break;
+                            case "pigeonhole_sort": url = "https://en.wikipedia.org/wiki/Pigeonhole_sort"; break;
+                            case "radix_sort": url = "https://en.wikipedia.org/wiki/Radix_sort"; break;
+                            case "quick_sort": url = "https://en.wikipedia.org/wiki/Quicksort"; break;
+                            case "merge_sort": url = "https://en.wikipedia.org/wiki/Merge_sort"; break;
+                            default: break;
                         }
                         if (url) window.open(url);
                     }}>

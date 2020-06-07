@@ -4,8 +4,6 @@ import { CONSTS, getBaseAnimationSpeed, updateAnimationSpeed } from '../Constant
 
 
 export async function invokeSortingAlgorithm(method, v) {
-    // testAlgorithm(v); return;
-
     // sort array based on method
     switch (method) {
         case "bubble_sort": await bubbleSort(v); break;
@@ -26,8 +24,14 @@ export async function invokeSortingAlgorithm(method, v) {
         case "bead_sort": await beadSort(v); break;
         case "pancake_sort": await pancakeSort(v); break;
         case "pigeonhole_sort": await pigeonholeSort(v); break;
+        case "radix_sort": await radixSort(v); break;
+        case "quick_sort": await quickSort(v); break;
+        case "merge_sort": await mergeSort(v); break;
         default: break;
     }
+
+    // wait for all colorings to be executed
+    while (coloringAll) { await sleep(2); }
 }
 
 
@@ -64,7 +68,7 @@ async function bubbleSort(v) {
     while (unsorted);
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function cocktailSort(v) {
@@ -122,7 +126,7 @@ async function cocktailSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function oddEvenSort(v) {
@@ -157,7 +161,7 @@ async function oddEvenSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function combSort(v) {
@@ -196,7 +200,7 @@ async function combSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function selectionSort(v) {
@@ -232,7 +236,7 @@ async function selectionSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function insertionSort(v) {
@@ -271,7 +275,7 @@ async function insertionSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function gnomeSort(v) {
@@ -304,7 +308,7 @@ async function gnomeSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function cycleSort(v) {
@@ -375,7 +379,7 @@ async function cycleSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function shellSort(v) {
@@ -391,6 +395,12 @@ async function shellSort(v) {
 
     for (const gap of gaps) {
         for (let i = gap; i < N; ++i) {
+            // check if a stop was requested
+            if (stopRequest.isRequested) {
+                stopRequest.requestHandled();
+                return;
+            }
+
             // color base bar
             await color(v, [i], CONSTS.PIVOT_COLOR, true);
 
@@ -419,10 +429,13 @@ async function shellSort(v) {
             // color base bar back to normal
             color(v, [i], CONSTS.STANDARD_COLOR, true);
         }
+
+        if (gap === 1)
+            color(v, [N - 1], CONSTS.SORTED_COLOR, true);
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function treeSort(v) {
@@ -509,7 +522,7 @@ async function treeSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function bogoSort(v) {
@@ -541,7 +554,7 @@ async function bogoSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function slowSort(v) {
@@ -585,7 +598,7 @@ async function slowSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function heapSort(v) {
@@ -668,7 +681,7 @@ async function heapSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function strandSort(v) {
@@ -765,7 +778,7 @@ async function strandSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function stoogeSort(v) {
@@ -802,7 +815,7 @@ async function stoogeSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function beadSort(v) {
@@ -848,7 +861,7 @@ async function beadSort(v) {
     }
 
     // color all bars as sorted
-    v.forEach(b => b.setColor(CONSTS.SORTED_COLOR));
+    colorAllSorted(v);
 }
 
 async function pancakeSort(v) {
@@ -947,15 +960,6 @@ async function pancakeSort(v) {
 }
 
 async function pigeonholeSort(v) {
-    function getRandomColor() {
-        let letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-
     let N = v.length;
     let minVal = v[0].getHeight();
     let maxVal = minVal;
@@ -966,10 +970,9 @@ async function pigeonholeSort(v) {
     }
 
     let size = maxVal - minVal + 1;
-    let holes = range(0, size).map(_ => new Object({
-        count: 0,
-        color: getRandomColor()
-    }));
+    let holes = range(0, size).map(function () {
+        return { count: 0, color: getRandomColor() };
+    });
 
     for (let i = 0; i < N; ++i) {
         // check if a stop was requested
@@ -994,24 +997,194 @@ async function pigeonholeSort(v) {
     }
 
     // color all bars as sorted
-    for (let i = 0; i < N; ++i) {
+    colorAllSorted(v);
+}
+
+async function radixSort(v) {
+    // initialize
+    let N = v.length;
+
+    // start looping
+    for (let shift = 31; shift > (31 - 7); --shift) { // just need 7 bits (max is 100)
         // check if a stop was requested
         if (stopRequest.isRequested) {
             stopRequest.requestHandled();
             return;
         }
-        await color(v, [i], CONSTS.SORTED_COLOR, true);
+
+        let tmp = new Array(N);
+        let j = 0;
+        for (let i = 0; i < N; ++i) {
+            // check if a stop was requested
+            if (stopRequest.isRequested) {
+                stopRequest.requestHandled();
+                return;
+            }
+            await color(v, [i], CONSTS.COMPARED_COLOR);
+
+            let move = (v[i].getHeight() << shift) >= 0;
+            if (shift === 0 ? !move : move) {
+                tmp[j++] = v[i].getHeight();
+            }
+            else {
+                v[i - j].setHeight(v[i].getHeight());
+                await color(v, [i - j], CONSTS.SWAPPED_COLOR);
+            }
+        }
+
+        for (let i = j; i < N; ++i) {
+            tmp[i] = v[i - j].getHeight();
+            color(v, [i - j], CONSTS.PIVOT_COLOR);
+            await color(v, [i], CONSTS.COMPARED_COLOR);
+        }
+
+        for (let i = 0; i < N; ++i) {
+            v[i].setHeight(tmp[i]);
+            await color(v, [i], CONSTS.SWAPPED_COLOR);
+        }
     }
+
+    // color all bars as sorted
+    colorAllSorted(v);
+}
+
+async function quickSort(v) {
+    async function quickSortHelper(v, start, end) {
+        if (start >= end) return;
+
+        // check if a stop was requested
+        if (stopRequest.isRequested) return;
+
+        let pivotIdx = Math.floor((end + start) / 2);
+        let pivot = v[pivotIdx].getHeight();
+        // color pivot bar
+        await color(v, [pivotIdx], CONSTS.PIVOT_COLOR, true);
+
+        let newStart = start;
+        let newEnd = end;
+        while (newStart <= newEnd) {
+            // check if a stop was requested
+            if (stopRequest.isRequested) return;
+
+            while (v[newStart].getHeight() < pivot) {
+                // check if a stop was requested
+                if (stopRequest.isRequested) return;
+                // color bar under comparison
+                await color(v, [newStart], CONSTS.COMPARED_COLOR);
+                newStart++;
+            }
+
+            while (v[newEnd].getHeight() > pivot) {
+                // check if a stop was requested
+                if (stopRequest.isRequested) return;
+                // color bar under comparison
+                await color(v, [newEnd], CONSTS.COMPARED_COLOR);
+                newEnd--;
+            }
+
+            if (newStart <= newEnd) {
+                swap(v, newStart, newEnd);
+                // color swapped bars
+                await color(v, [newStart, newEnd], CONSTS.SWAPPED_COLOR);
+                newStart++;
+                newEnd--;
+            }
+
+        }
+
+        // restore color of pivot bar
+        color(v, [pivotIdx], CONSTS.STANDARD_COLOR, true);
+
+        await quickSortHelper(v, start, newEnd);
+        await quickSortHelper(v, newStart, end);
+    }
+
+    // actual sorting
+    await quickSortHelper(v, 0, v.length - 1);
+
+    // check for unhandled stop requests
+    if (stopRequest.isRequested) {
+        stopRequest.requestHandled();
+        return;
+    }
+
+    // color all bars as sorted
+    colorAllSorted(v);
+}
+
+async function mergeSort(v) {
+    async function merge(v, start, mid, end) {
+        // check if a stop was requested
+        if (stopRequest.isRequested) return;
+
+        let start2 = mid + 1;
+        if (v[mid].getHeight() <= v[start2].getHeight()) return;
+
+        while (start <= mid && start2 <= end) {
+            // check if a stop was requested
+            if (stopRequest.isRequested) return;
+
+            if (v[start].getHeight() <= v[start2].getHeight()) {
+                start++;
+            }
+            else {
+                let tmp = v[start2].getHeight();
+                for (let i = start2; i !== start; --i) {
+                    // check if a stop was requested
+                    if (stopRequest.isRequested) return;
+
+                    swap(v, i, i - 1);
+
+                    // color swapped bars
+                    await color(v, [i, i - 1], CONSTS.SWAPPED_COLOR);
+                }
+                v[start].setHeight(tmp);
+                // color swapped bar
+                await color(v, [start], CONSTS.SWAPPED_COLOR);
+
+                start++;
+                mid++;
+                start2++;
+            }
+        }
+    }
+
+    async function mergeSortHelper(v, start, end) {
+        // check if a stop was requested
+        if (stopRequest.isRequested) return;
+
+        if (start >= end) return;
+
+        let mid = Math.floor((start + end) / 2);
+        // reset colors; color limit bars
+        v.forEach(b => b.setColor(CONSTS.STANDARD_COLOR));
+        color(v, [start, end], CONSTS.COMPARED_COLOR);
+        await color(v, [mid], CONSTS.PIVOT_COLOR);
+
+        // recursions
+        await mergeSortHelper(v, start, mid);
+        await mergeSortHelper(v, mid + 1, end);
+
+        // reset colors; color bars delimiting ranges to merge
+        v.forEach(b => b.setColor(CONSTS.STANDARD_COLOR));
+        color(v, [start, mid + 1, end], CONSTS.PIVOT_COLOR, true);
+        await merge(v, start, mid, end);
+    }
+
+    // actual sorting
+    await mergeSortHelper(v, 0, v.length - 1);
+
+    // check for unhandled stop requests
+    if (stopRequest.isRequested) {
+        stopRequest.requestHandled();
+        return;
+    }
+
+    // color all bars as sorted
+    colorAllSorted(v);
 }
 
 
-
-function isSorted(a) {
-    for (let i = 0; i < a.length - 1; ++i) {
-        if (a[i] > a[i + 1]) return false;
-    }
-    return true;
-}
 
 let stopRequest = {
     isRequested: false,
@@ -1064,10 +1237,31 @@ async function color(v, indeces, color, permanent = false) {
     }
 }
 
+let coloringAll = false;
+async function colorAllSorted(v) {
+    coloringAll = true;
+
+    // color all bars as sorted
+    for (let i = 0; i < v.length; ++i) {
+        v[i].setColor(CONSTS.SORTED_COLOR);
+        // await color(v, [i], CONSTS.SORTED_COLOR, true);
+        await sleep(5);
+    }
+
+    coloringAll = false;
+}
+
+function getRandomColor() {
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 
 function range(start, end) {
     // end not inclusive
     let length = end - start;
     return Array.from({ length }, (_, i) => start + i);
 }
-
